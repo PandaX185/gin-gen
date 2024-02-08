@@ -1,0 +1,63 @@
+package packageName
+
+import (
+    "gorm.io/gorm"
+)
+
+type repositoryRepo interface {
+    CreateRepository(repository *Repository) (*Repository, error)
+    GetRepository(id int) (*Repository, error)
+    GetRepositorys() ([]*Repository, error)
+    UpdateRepository(repository *Repository) (*Repository, error)
+    DeleteRepository(id int) error
+}
+
+type RepositoryRepo struct {
+    Db *gorm.DB
+}
+
+func NewRepository(db *gorm.DB) *Repository {
+    return &RepositoryRepo{Db: db}
+}
+
+func (r *Repository) CreateRepository(repository *Repository) (*Repository, error) {
+    err := r.Db.Create(repository).Error
+    if err != nil {
+        return nil, err
+    }
+    return repository, nil
+}
+
+func (r *Repository) GetRepository(id int) (*Repository, error) {
+    repository := &Repository{}
+    err := r.Db.First(repository, id).Error
+    if err != nil {
+        return nil, err
+    }
+    return repository, nil
+}
+
+func (r *Repository) GetRepositorys() ([]*Repository, error) {
+    repositorys := []*Repository{}
+    err := r.Db.Find(&repositorys).Error
+    if err != nil {
+        return nil, err
+    }
+    return repositorys, nil
+}
+
+func (r *Repository) UpdateRepository(repository *Repository) (*Repository, error) {
+    err := r.Db.Save(repository).Error
+    if err != nil {
+        return nil, err
+    }
+    return repository, nil
+}
+
+func (r *Repository) DeleteRepository(id int) error {
+    err := r.Db.Delete(&Repository{}, id).Error
+    if err != nil {
+        return err
+    }
+    return nil
+}

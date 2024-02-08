@@ -6,23 +6,40 @@ import (
 	"strings"
 )
 
-func CreateFile(name ...string) (*os.File, error) {
+func CreateFile(path, defaultPath string) *os.File {
+	path = strings.TrimSuffix(strings.TrimSuffix(path, "/"), ".go")
+	paths := strings.Split(path, "/")
+	if len(paths) == 1 {
+		exec.Command("mkdir", defaultPath).Run()
+		path = defaultPath + "/" + path
+	} else {
+		exec.Command("mkdir", "-p", strings.Join(paths[:len(paths)-1], "/")).Run()
+	}
+	file, err := os.Create(path + ".go")
+	if err != nil {
+		return nil
+	}
+	return file
+}
+
+func CreateJwtFile(name ...string) (*os.File, error) {
 	path := "login"
 	if len(name) != 0 {
 		path = name[0]
 	}
-	path = strings.TrimSuffix(strings.TrimSuffix(path, "/"), ".go")
-	paths := strings.Split(path, "/")
-	for i := 0; i < len(paths)-1; i++ {
-		exec.Command("mkdir", paths[i]).Run()
+	file := CreateFile(path, "auth")
+	if file == nil {
+		return nil, os.ErrNotExist
 	}
-	if len(paths) == 1 {
-		exec.Command("mkdir", "auth").Run()
-		path = "auth/" + path
-	}
-	file, err := os.Create(path + ".go")
-	if err != nil {
-		return nil, err
+	return file, nil
+}
+
+func CreateRepoFile(name string) (*os.File, error) {
+	fileName := strings.Split(name, "/")[len(strings.Split(name, "/"))-1]
+	name += "/" + fileName
+	file := CreateFile(name, name)
+	if file == nil {
+		return nil, os.ErrNotExist
 	}
 	return file, nil
 }

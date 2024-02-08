@@ -17,22 +17,20 @@ var JwtCmd = &cobra.Command{
 			err  error
 		)
 		if len(args) == 0 {
-			file, err = CreateFile()
+			file, err = CreateJwtFile()
 		} else {
-			file, err = CreateFile(args[0])
+			file, err = CreateJwtFile(args[0])
 		}
 		if err != nil {
 			panic(err)
 		}
-		defer func() {
-			err := file.Close()
-			if err != nil {
-				panic(err)
-			}
-		}()
-		jwtFile, _ := os.Open("templates/JWT.txt")
+		jwtFile, _ := os.Open("templates/jwt.txt")
 		jwtTemplate, _ := io.ReadAll(jwtFile)
 		file.Write(jwtTemplate)
 		exec.Command("go", "mod", "tidy").Run()
+		defer func() {
+			file.Close()
+			jwtFile.Close()
+		}()
 	},
 }

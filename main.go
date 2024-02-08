@@ -15,6 +15,7 @@ var rootCmd = &cobra.Command{
 
 func main() {
 	rootCmd.AddCommand(cmd.JwtCmd)
+	rootCmd.AddCommand(cmd.RepoCmd)
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
