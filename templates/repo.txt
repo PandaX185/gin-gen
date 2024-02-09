@@ -16,11 +16,11 @@ type RepositoryRepo struct {
     Db *gorm.DB
 }
 
-func NewRepository(db *gorm.DB) *Repository {
+func NewRepository(db *gorm.DB) *RepositoryRepo {
     return &RepositoryRepo{Db: db}
 }
 
-func (r *Repository) CreateRepository(repository *Repository) (*Repository, error) {
+func (r *RepositoryRepo) CreateRepository(repository *Repository) (*Repository, error) {
     err := r.Db.Create(repository).Error
     if err != nil {
         return nil, err
@@ -28,7 +28,7 @@ func (r *Repository) CreateRepository(repository *Repository) (*Repository, erro
     return repository, nil
 }
 
-func (r *Repository) GetRepository(id int) (*Repository, error) {
+func (r *RepositoryRepo) GetRepository(id int) (*Repository, error) {
     repository := &Repository{}
     err := r.Db.First(repository, id).Error
     if err != nil {
@@ -37,7 +37,7 @@ func (r *Repository) GetRepository(id int) (*Repository, error) {
     return repository, nil
 }
 
-func (r *Repository) GetRepositorys() ([]*Repository, error) {
+func (r *RepositoryRepo) GetRepositorys() ([]*Repository, error) {
     repositorys := []*Repository{}
     err := r.Db.Find(&repositorys).Error
     if err != nil {
@@ -46,7 +46,7 @@ func (r *Repository) GetRepositorys() ([]*Repository, error) {
     return repositorys, nil
 }
 
-func (r *Repository) UpdateRepository(repository *Repository) (*Repository, error) {
+func (r *RepositoryRepo) UpdateRepository(repository *Repository) (*Repository, error) {
     err := r.Db.Save(repository).Error
     if err != nil {
         return nil, err
@@ -54,7 +54,7 @@ func (r *Repository) UpdateRepository(repository *Repository) (*Repository, erro
     return repository, nil
 }
 
-func (r *Repository) DeleteRepository(id int) error {
+func (r *RepositoryRepo) DeleteRepository(id int) error {
     err := r.Db.Delete(&Repository{}, id).Error
     if err != nil {
         return err

@@ -13,6 +13,7 @@ var RepoCmd = &cobra.Command{
 	Use:   "repo <path>",
 	Short: "Create repository",
 	Run: func(cmd *cobra.Command, args []string) {
+		CreateModel(cmd, args)
 		var (
 			file *os.File
 			err  error
@@ -25,15 +26,15 @@ var RepoCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
-		var (
-			repoFile *os.File
-		)
+		repoFile, _ := os.Open("templates/repo.txt")
 		repoTemplate, _ := io.ReadAll(repoFile)
 		lines := strings.Split(string(repoTemplate), "\n")
-		repoName := strings.Split(args[0], "/")[len(strings.Split(args[0], "/"))-1]
+		repoName := strings.Split(file.Name(), "/")[len(strings.Split(file.Name(), "/"))-1]
+		repoName = strings.ReplaceAll(strings.TrimSuffix(repoName, ".go"), "_", " ")
+		repoName = strings.Split(repoName, " ")[0]
 		for i := range lines {
 			lines[i] = strings.ReplaceAll(lines[i], "packageName", repoName)
-			lines[i] = strings.ReplaceAll(lines[i], "repository", strings.ToLower(repoName))
+			lines[i] = strings.ReplaceAll(lines[i], "repository", repoName)
 			lines[i] = strings.ReplaceAll(lines[i], "Repository", strings.ToUpper(repoName[:1])+strings.ToLower(repoName[1:]))
 		}
 		file.Write([]byte(strings.Join(lines, "\n")))
