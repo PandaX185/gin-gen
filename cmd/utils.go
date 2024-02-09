@@ -23,7 +23,7 @@ func CreateFile(path, defaultPath string) *os.File {
 }
 
 func CreateJwtFile(name ...string) (*os.File, error) {
-	path := "login"
+	path := "auth"
 	if len(name) != 0 {
 		path = name[0]
 	}
@@ -50,6 +50,19 @@ func CreateRepoFile(name string) (*os.File, error) {
 func CreateModelFile(name string) (*os.File, error) {
 	fileName := strings.Split(name, "/")[len(strings.Split(name, "/"))-1]
 	name += "/" + fileName
+	file := CreateFile(name, name)
+	if file == nil {
+		return nil, os.ErrNotExist
+	}
+	return file, nil
+}
+
+func CreateServiceFile(name string) (*os.File, error) {
+	fileName := strings.Split(name, "/")[len(strings.Split(name, "/"))-1]
+	name += "/" + fileName
+	if _, err := os.Open(name + ".go"); err == nil {
+		name += "_service"
+	}
 	file := CreateFile(name, name)
 	if file == nil {
 		return nil, os.ErrNotExist

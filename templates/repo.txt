@@ -4,23 +4,23 @@ import (
     "gorm.io/gorm"
 )
 
-type repositoryRepo interface {
-    CreateRepository(repository *Repository) (*Repository, error)
-    GetRepository(id int) (*Repository, error)
-    GetRepositorys() ([]*Repository, error)
-    UpdateRepository(repository *Repository) (*Repository, error)
-    DeleteRepository(id int) error
+type repositoryRepository interface {
+    CreateModel(repository *Model) (*Model, error)
+    GetModel(id int) (*Model, error)
+    GetModels() ([]*Model, error)
+    UpdateModel(repository *Model) (*Model, error)
+    DeleteModel(id int) error
 }
 
-type RepositoryRepo struct {
+type ModelRepository struct {
     Db *gorm.DB
 }
 
-func NewRepository(db *gorm.DB) *RepositoryRepo {
-    return &RepositoryRepo{Db: db}
+func NewModel(db *gorm.DB) *ModelRepository {
+    return &ModelRepository{Db: db}
 }
 
-func (r *RepositoryRepo) CreateRepository(repository *Repository) (*Repository, error) {
+func (r *ModelRepository) CreateModel(repository *Model) (*Model, error) {
     err := r.Db.Create(repository).Error
     if err != nil {
         return nil, err
@@ -28,8 +28,8 @@ func (r *RepositoryRepo) CreateRepository(repository *Repository) (*Repository, 
     return repository, nil
 }
 
-func (r *RepositoryRepo) GetRepository(id int) (*Repository, error) {
-    repository := &Repository{}
+func (r *ModelRepository) GetModel(id int) (*Model, error) {
+    repository := &Model{}
     err := r.Db.First(repository, id).Error
     if err != nil {
         return nil, err
@@ -37,8 +37,8 @@ func (r *RepositoryRepo) GetRepository(id int) (*Repository, error) {
     return repository, nil
 }
 
-func (r *RepositoryRepo) GetRepositorys() ([]*Repository, error) {
-    repositorys := []*Repository{}
+func (r *ModelRepository) GetModels() ([]*Model, error) {
+    repositorys := []*Model{}
     err := r.Db.Find(&repositorys).Error
     if err != nil {
         return nil, err
@@ -46,7 +46,7 @@ func (r *RepositoryRepo) GetRepositorys() ([]*Repository, error) {
     return repositorys, nil
 }
 
-func (r *RepositoryRepo) UpdateRepository(repository *Repository) (*Repository, error) {
+func (r *ModelRepository) UpdateModel(repository *Model) (*Model, error) {
     err := r.Db.Save(repository).Error
     if err != nil {
         return nil, err
@@ -54,8 +54,8 @@ func (r *RepositoryRepo) UpdateRepository(repository *Repository) (*Repository, 
     return repository, nil
 }
 
-func (r *RepositoryRepo) DeleteRepository(id int) error {
-    err := r.Db.Delete(&Repository{}, id).Error
+func (r *ModelRepository) DeleteModel(id int) error {
+    err := r.Db.Delete(&Model{}, id).Error
     if err != nil {
         return err
     }

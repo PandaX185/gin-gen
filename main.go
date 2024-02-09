@@ -17,6 +17,7 @@ func main() {
 	rootCmd.AddCommand(cmd.JwtCmd)
 	rootCmd.AddCommand(cmd.RepoCmd)
 	rootCmd.AddCommand(cmd.ModelCmd)
+	rootCmd.AddCommand(cmd.ServiceCmd)
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}

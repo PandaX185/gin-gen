@@ -1,0 +1,37 @@
+package packageName
+
+type serviceService interface {
+    CreateModel(service *Model) (*Model, error)
+    GetModel(id int) (*Model, error)
+    GetModels() ([]*Model, error)
+    UpdateModel(service *Model) (*Model, error)
+    DeleteModel(id int) error
+}
+
+type ModelService struct {
+    repo ModelRepository
+}
+
+func NewModelService(repo ModelRepository) ModelService {
+    return ModelService{repo}
+}
+
+func (s *ModelService) CreateModel(service *Model) (*Model, error) {
+    return s.repo.CreateModel(service)
+}
+
+func (s *ModelService) GetModel(id int) (*Model, error) {
+    return s.repo.GetModel(id)
+}
+
+func (s *ModelService) GetModels() ([]*Model, error) {
+    return s.repo.GetModels()
+}
+
+func (s *ModelService) UpdateModel(service *Model) (*Model, error) {
+    return s.repo.UpdateModel(service)
+}
+
+func (s *ModelService) DeleteModel(id int) error {
+    return s.repo.DeleteModel(id)
+}
