@@ -9,6 +9,52 @@ import (
 	"strings"
 )
 
+func CreateJWT(cmd *cobra.Command, args []string) {
+	var (
+		file *os.File
+		err  error
+	)
+	if len(args) == 0 {
+		file, err = CreateJwtFile()
+	} else {
+		file, err = CreateJwtFile(args[0])
+	}
+	if err != nil {
+		panic(err)
+	}
+	jwtFile, _ := os.Open("templates/jwt.txt")
+	jwtTemplate, _ := io.ReadAll(jwtFile)
+	file.Write(jwtTemplate)
+	exec.Command("go", "mod", "tidy").Run()
+	defer func() {
+		file.Close()
+		jwtFile.Close()
+	}()
+}
+
+func CreateJWTMiddleware(cmd *cobra.Command, args []string) {
+	var (
+		file *os.File
+		err  error
+	)
+	if len(args) == 0 {
+		file, err = CreateJwtMiddlewareFile()
+	} else {
+		file, err = CreateJwtMiddlewareFile(args[0])
+	}
+	if err != nil {
+		panic(err)
+	}
+	jwtFile, _ := os.Open("templates/jwt-middleware.txt")
+	jwtTemplate, _ := io.ReadAll(jwtFile)
+	file.Write(jwtTemplate)
+	exec.Command("go", "mod", "tidy").Run()
+	defer func() {
+		file.Close()
+		jwtFile.Close()
+	}()
+}
+
 func CreateModel(cmd *cobra.Command, args []string) {
 	var (
 		file *os.File

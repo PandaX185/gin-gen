@@ -1,0 +1,45 @@
+package packageName
+
+import (
+    "github.com/gin-gonic/gin"
+    "github.com/golang-jwt/jwt"
+    "net/http"
+
+    // TODO: import path to your AuthClaims
+)
+
+func CheckAccessTokenMiddleware() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        token := c.GetHeader("Authorization")
+        if token == "" {
+            c.JSON(http.StatusUnauthorized, gin.H{"error": "token is required"})
+            c.Abort()
+            return
+        }
+        if !ValidateAccessToken(token) {
+            c.JSON(http.StatusUnauthorized, gin.H{"error": "token is invalid"})
+            c.Abort()
+            return
+        }
+        claims := ParseAccessToken(token)
+        c.Next()
+    }
+}
+
+func ValidateAccessToken(token string) bool {
+    claims := &AuthClaims{}
+    if _, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+        return nil, nil
+    }); err != nil {
+        return false
+    }
+    return true
+}
+
+func ParseAccessToken(token string) *AuthClaims {
+    claims := &AuthClaims{}
+    jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+        return nil, nil
+    })
+    return claims
+}

@@ -34,6 +34,18 @@ func CreateJwtFile(name ...string) (*os.File, error) {
 	return file, nil
 }
 
+func CreateJwtMiddlewareFile(name ...string) (*os.File, error) {
+	path := "middleware"
+	if len(name) != 0 {
+		path = name[0]
+	}
+	file := CreateFile(path, "middleware")
+	if file == nil {
+		return nil, os.ErrNotExist
+	}
+	return file, nil
+}
+
 func CreateRepoFile(name string) (*os.File, error) {
 	fileName := strings.Split(name, "/")[len(strings.Split(name, "/"))-1]
 	name += "/" + fileName
