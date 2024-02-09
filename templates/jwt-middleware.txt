@@ -5,7 +5,7 @@ import (
     "github.com/golang-jwt/jwt"
     "net/http"
 
-    // TODO: import path to your AuthClaims
+    // TODO: import path to your auth package
 )
 
 func CheckAccessTokenMiddleware() gin.HandlerFunc {
@@ -21,25 +21,17 @@ func CheckAccessTokenMiddleware() gin.HandlerFunc {
             c.Abort()
             return
         }
-        claims := ParseAccessToken(token)
+        claims := auth.ParseAccessToken(token)
         c.Next()
     }
 }
 
 func ValidateAccessToken(token string) bool {
-    claims := &AuthClaims{}
+    claims := &auth.AuthClaims{}
     if _, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
         return nil, nil
     }); err != nil {
         return false
     }
     return true
-}
-
-func ParseAccessToken(token string) *AuthClaims {
-    claims := &AuthClaims{}
-    jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-        return nil, nil
-    })
-    return claims
 }
