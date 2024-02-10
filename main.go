@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github/PandaX185/gin-gen/cmd"
+	"github.com/PandaX185/gin-gen/cmd"
 	"os"
 
 	"github.com/spf13/cobra"
