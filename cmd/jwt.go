@@ -6,7 +6,7 @@ import (
 
 var JwtCmd = &cobra.Command{
 	Use:   "jwt <path>",
-	Short: "generate jwt necessary functions",
+	Short: "Generate jwt necessary functions",
 	Run: func(cmd *cobra.Command, args []string) {
 		CreateJWT(cmd, args)
 		CreateJWTMiddleware(cmd, args)

@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
 
 var ControllerCmd = &cobra.Command{
 	Use:   "controller <path>",
-	Short: "generate controller file",
+	Short: "Create controller file",
 	Run: func(cmd *cobra.Command, args []string) {
 		CreateModel(cmd, args)
 		CreateRepo(cmd, args)

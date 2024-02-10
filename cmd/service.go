@@ -6,7 +6,7 @@ import (
 
 var ServiceCmd = &cobra.Command{
 	Use:   "service <path>",
-	Short: "Create service",
+	Short: "Create service file",
 	Run: func(cmd *cobra.Command, args []string) {
 		CreateModel(cmd, args)
 		CreateRepo(cmd, args)

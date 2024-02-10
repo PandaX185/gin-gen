@@ -6,7 +6,7 @@ import (
 
 var ModelCmd = &cobra.Command{
 	Use:   "model <path>",
-	Short: "Create model",
+	Short: "Create model file",
 	Run: func(cmd *cobra.Command, args []string) {
 		CreateModel(cmd, args)
 	},

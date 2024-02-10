@@ -1,4 +1,4 @@
-module github/PandaX185/gin-gen
+module github.com/PandaX185/gin-gen
 
 go 1.21.5
 
