@@ -81,3 +81,16 @@ func CreateServiceFile(name string) (*os.File, error) {
 	}
 	return file, nil
 }
+
+func CreateControllerFile(name string) (*os.File, error) {
+	fileName := strings.Split(name, "/")[len(strings.Split(name, "/"))-1]
+	name += "/" + fileName
+	if _, err := os.Open(name + ".go"); err == nil {
+		name += "_controller"
+	}
+	file := CreateFile(name, name)
+	if file == nil {
+		return nil, os.ErrNotExist
+	}
+	return file, nil
+}

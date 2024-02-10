@@ -115,3 +115,66 @@ func CreateRepo(cmd *cobra.Command, args []string) {
 		repoFile.Close()
 	}()
 }
+
+func CreateService(cmd *cobra.Command, args []string) {
+	var (
+		file *os.File
+		err  error
+	)
+	if len(args) == 0 {
+		log.Fatalln("name is required")
+	} else {
+		file, err = CreateServiceFile(args[0])
+	}
+	if err != nil {
+		panic(err)
+	}
+	serviceFile, _ := os.Open("templates/service.txt")
+	serviceTemplate, _ := io.ReadAll(serviceFile)
+	lines := strings.Split(string(serviceTemplate), "\n")
+	serviceName := strings.Split(file.Name(), "/")[len(strings.Split(file.Name(), "/"))-1]
+	serviceName = strings.ReplaceAll(strings.TrimSuffix(serviceName, ".go"), "_", " ")
+	serviceName = strings.Split(serviceName, " ")[0]
+	for i := range lines {
+		lines[i] = strings.ReplaceAll(lines[i], "packageName", serviceName)
+		lines[i] = strings.ReplaceAll(lines[i], "service", serviceName)
+		lines[i] = strings.ReplaceAll(lines[i], "Model", strings.ToUpper(serviceName[:1])+strings.ToLower(serviceName[1:]))
+	}
+	file.Write([]byte(strings.Join(lines, "\n")))
+	exec.Command("go", "mod", "tidy").Run()
+	defer func() {
+		file.Close()
+		serviceFile.Close()
+	}()
+}
+
+func CreateController(cmd *cobra.Command, args []string) {
+	var (
+		file *os.File
+		err  error
+	)
+	if len(args) == 0 {
+		log.Fatalln("name is required")
+	} else {
+		file, err = CreateControllerFile(args[0])
+	}
+	if err != nil {
+		panic(err)
+	}
+	controllerFile, _ := os.Open("templates/controller.txt")
+	controllerTemplate, _ := io.ReadAll(controllerFile)
+	lines := strings.Split(string(controllerTemplate), "\n")
+	controllerName := strings.Split(file.Name(), "/")[len(strings.Split(file.Name(), "/"))-1]
+	controllerName = strings.ReplaceAll(strings.TrimSuffix(controllerName, ".go"), "_", " ")
+	controllerName = strings.Split(controllerName, " ")[0]
+	for i := range lines {
+		lines[i] = strings.ReplaceAll(lines[i], "packageName", controllerName)
+		lines[i] = strings.ReplaceAll(lines[i], "Model", strings.ToUpper(controllerName[:1])+strings.ToLower(controllerName[1:]))
+	}
+	file.Write([]byte(strings.Join(lines, "\n")))
+	exec.Command("go", "mod", "tidy").Run()
+	defer func() {
+		file.Close()
+		controllerFile.Close()
+	}()
+}

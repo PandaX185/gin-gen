@@ -18,6 +18,7 @@ func main() {
 	rootCmd.AddCommand(cmd.RepoCmd)
 	rootCmd.AddCommand(cmd.ModelCmd)
 	rootCmd.AddCommand(cmd.ServiceCmd)
+	rootCmd.AddCommand(cmd.ControllerCmd)
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
